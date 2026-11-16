@@ -92,7 +92,6 @@ const remarkArbitraryDelimiter: Plugin<[Options], Root> = (options) => {
   return (tree) => {
     visit(tree, 'text', (node: Text, index, parent: Parent | undefined) => {
       if (index === undefined || parent === undefined) return
-      if ((node.data as { hName?: string } | undefined)?.hName) return
 
       const parts = splitText(node.value, pattern, {
         delimiter,
@@ -107,7 +106,7 @@ const remarkArbitraryDelimiter: Plugin<[Options], Root> = (options) => {
       // `visit` descends into newly inserted nodes, which would re-process
       // the wrappers we just created. Replace the node and skip past the
       // replacement by returning the next index.
-      parent.children.splice(index, 1, ...parts)
+      parent.children.splice(index, 1, ...(parts as unknown as typeof parent.children))
       return index + parts.length
     })
   }
@@ -202,27 +201,41 @@ function text(value: string): Text {
 }
 
 /**
- * A text node carrying `hName`/`hProperties`, which `remark-rehype` (and
- * MDX/Svelte renderers) understand as "render this as an element".
+ * A wrapper node carrying `hName`/`hProperties`, which renderers translate
+ * into an element.
+ *
+ * The `type: 'delimitedText'` is deliberate. `mdast-util-to-hast` documents
+ * `hName` as applying to nodes that are *not* plain `text` nodes: a node with
+ * a `value` and no `hName`/`hProperties` becomes text, and "otherwise" it
+ * becomes an element (see "Fields on nodes" in mdast-util-to-hast).
+ *
+ * `remark-rehype` additionally has a lenient fallback that turns a `text`
+ * node with `hName` into an element, but that is outside the documented
+ * contract and not all renderers implement it — mdsvex (0.11) does not, and
+ * would drop the wrapper. Using a non-`text` type with `hName` matches the
+ * documented shape (as in the `mark` node example in those docs) and works
+ * across mdsvex, MDX, and `remark-rehype`.
  */
-interface WrapperNode extends Text {
+interface WrapperNode {
+  type: 'delimitedText'
   data: {
     hName: string
     hProperties: Record<string, unknown>
   }
+  children: [Text]
 }
 
 function wrapper(value: string, options: WrapperOptions): WrapperNode {
   return {
-    type: 'text',
-    value,
+    type: 'delimitedText',
     data: {
       hName: options.element,
       hProperties: {
         ...options.hProperties,
         className: options.className
       }
-    }
+    },
+    children: [text(value)]
   }
 }
 
