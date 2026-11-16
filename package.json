@@ -1,0 +1,66 @@
+{
+  "name": "remark-arbitrary-delimiter",
+  "version": "0.1.0",
+  "description": "Remark plugin that wraps text between arbitrary delimiters in an element with a CSS class.",
+  "type": "module",
+  "license": "MIT",
+  "author": "David Seidler <reldies.divad@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nattotata/remark-arbitrary-delimiter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Nattotata/remark-arbitrary-delimiter/issues"
+  },
+  "homepage": "https://github.com/Nattotata/remark-arbitrary-delimiter#readme",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "remark",
+    "remark-plugin",
+    "unified",
+    "markdown",
+    "mdast",
+    "delimiter",
+    "class",
+    "css",
+    "span",
+    "mdsvex",
+    "mdx",
+    "astro",
+    "nuxt"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test --experimental-strip-types \"test/**/*.test.ts\"",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "dependencies": {
+    "unist-util-visit": "^5.0.0"
+  },
+  "peerDependencies": {
+    "unified": "^11.0.0"
+  },
+  "devDependencies": {
+    "@types/mdast": "^4.0.4",
+    "@types/node": "^22.10.0",
+    "mdast-util-to-hast": "^13.2.0",
+    "rehype-stringify": "^10.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "typescript": "^5.7.0",
+    "unified": "^11.0.5"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
