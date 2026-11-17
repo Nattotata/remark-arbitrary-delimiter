@@ -49,7 +49,7 @@ And I wanted to learn more about the markdown ast.
 npm install remark-arbitrary-delimiter
 ```
 
-This package is ESM only and requires Node 18+.
+This package is ESM only and requires Node 22.6+.
 
 ## Use
 
