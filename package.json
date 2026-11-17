@@ -1,6 +1,6 @@
 {
   "name": "remark-arbitrary-delimiter",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Remark plugin that wraps text between arbitrary delimiters in an element with a CSS class.",
   "type": "module",
   "license": "MIT",
